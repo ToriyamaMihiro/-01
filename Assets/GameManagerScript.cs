@@ -40,6 +40,7 @@ public class GameManagerScript : MonoBehaviour
         return new Vector2Int(-1, -1);
 
     }
+   
     //二個以上ならダメにするなら
     // bool int moveTo,int pusuPower)//移動の可否
     bool MoveNumber(string tag, Vector2Int moveFrom, Vector2Int moveTo)//移動の可否
@@ -75,6 +76,7 @@ public class GameManagerScript : MonoBehaviour
 
         return true;
     }
+  
     // Start is called before the first frame update
     //初期化 1フレームずつの処理　
     void Start()
@@ -83,21 +85,23 @@ public class GameManagerScript : MonoBehaviour
 
         map = new int[,] {
         {0,0,0,0,0},
-        {0,2,1,2,0},
-        {0,0,2,0,0}
+        {0,3,1,3,0},
+        {0,0,2,0,0},
+        {0,2,3,2,0},
+        {0,0,0,0,0}
         };
         field = new GameObject[map.GetLength(0), map.GetLength(1)];
 
         //デバックログの出力
         //Debug.Log("Hellow World");
-        string debugText = "";
+       
         for (int y = 0; y < map.GetLength(0); y++)
         {
             for (int x = 0; x < map.GetLength(1); x++)
             {
                 if (map[y, x] == 1)
                 {
-                  
+
                     field[y, x] = Instantiate(playerPrefab, new Vector3(x, map.GetLength(0) - y, 0), Quaternion.identity);
 
                 }
@@ -106,17 +110,47 @@ public class GameManagerScript : MonoBehaviour
                     field[y, x] = Instantiate(BoxPrefab, new Vector3(x, map.GetLength(0) - y, 0), Quaternion.identity);
                 }
             }
-            debugText += "\n";
+           
         }
 
-        Debug.Log(debugText);
-
+       
     }
+
+    bool IsCleard()
+    {
+       
+        List<Vector2Int> goals = new List<Vector2Int>();
+        for (int y = 0; y < map.GetLength(0); y++)
+        {
+            for (int x = 0; x < map.GetLength(1); x++)
+            {
+                if (map[y, x] == 3)
+                {
+                    goals.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+        for (int i = 0; i < goals.Count; i++)
+        {
+            GameObject f = field[goals[i].y, goals[i].x];
+            if (f == null || f.tag != "Box")
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     // Update is called once per frame
     //更新処理　毎フレームの処理
     void Update()
     {
+        if (IsCleard())
+        {
+            string debugText = "GameClear!";
+            Debug.Log(debugText);
+        }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             //見つからなかった時の溜めに-1で初期化
