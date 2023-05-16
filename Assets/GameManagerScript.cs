@@ -42,7 +42,7 @@ public class GameManagerScript : MonoBehaviour
         return new Vector2Int(-1, -1);
 
     }
-   
+
     //二個以上ならダメにするなら
     // bool int moveTo,int pusuPower)//移動の可否
     bool MoveNumber(string tag, Vector2Int moveFrom, Vector2Int moveTo)//移動の可否
@@ -78,7 +78,7 @@ public class GameManagerScript : MonoBehaviour
 
         return true;
     }
-  
+
     // Start is called before the first frame update
     //初期化 1フレームずつの処理　
     void Start()
@@ -96,34 +96,32 @@ public class GameManagerScript : MonoBehaviour
 
         //デバックログの出力
         //Debug.Log("Hellow World");
-       
+
         for (int y = 0; y < map.GetLength(0); y++)
         {
             for (int x = 0; x < map.GetLength(1); x++)
             {
                 if (map[y, x] == 1)
                 {
-
                     field[y, x] = Instantiate(playerPrefab, new Vector3(x, map.GetLength(0) - y, 0), Quaternion.identity);
-
                 }
-                else if (map[y, x] == 2)
+                if (map[y, x] == 2)
                 {
                     field[y, x] = Instantiate(BoxPrefab, new Vector3(x, map.GetLength(0) - y, 0), Quaternion.identity);
                 }
-                //else if (map[y, x] == 3)
-                //{
-                //    field[y, x] = Instantiate(goalPrefab, new Vector3(x, map.GetLength(0) - y, 0), Quaternion.identity);
-                //}
+                if (map[y, x] == 3)
+                {
+                    field[y, x] = Instantiate(goalPrefab, new Vector3(x, map.GetLength(0) - y, 0), Quaternion.identity);
+                }
             }
-           
+
         }
 
-       
+
     }
 
     bool IsCleard()
-    {       
+    {
         List<Vector2Int> goals = new List<Vector2Int>();
         for (int y = 0; y < map.GetLength(0); y++)
         {
